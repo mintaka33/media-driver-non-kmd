@@ -1,1 +1,16 @@
-build
+build_driver
+build_utils
+autom4te.cache
+
+*.m4
+Makefile.in
+
+libva-utils/compile
+libva-utils/config.h.in
+libva-utils/config.sub
+libva-utils/config.guess
+libva-utils/configure
+libva-utils/depcomp
+libva-utils/install-sh
+libva-utils/ltmain.sh
+libva-utils/missing
