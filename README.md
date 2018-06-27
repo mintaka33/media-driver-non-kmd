@@ -1,5 +1,5 @@
 # media-driver-non-kmd
-A KMD-less app+libva+umd execution environment
+A KMD-less app+libva+umd running environment
 
 # code base
 - [media-driver](https://github.com/intel/media-driver) (tag-[1e4cfae](https://github.com/intel/media-driver/commit/1e4cfae7c72cde426a93ebbbbfc2103cfe900216))
@@ -10,7 +10,8 @@ A KMD-less app+libva+umd execution environment
 # build
 ```bash
 # install tools and dependencies
-sudo apt install autoconf libtool libdrm-dev xorg xorg-dev openbox libx11-dev libgl1-mesa-glx libgl1-mesa-dev
+sudo apt install autoconf libtool libdrm-dev xorg xorg-dev \
+openbox libx11-dev libgl1-mesa-glx libgl1-mesa-dev
 
 # build libva
 cd libva
