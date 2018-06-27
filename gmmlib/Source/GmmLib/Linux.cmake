@@ -103,7 +103,7 @@ SET (GMMLIB_COMPILER_FLAGS_DEBUG
     )
 
 SET (GMMLIB_COMPILER_FLAGS_RELEASE
-    -O2
+    -O0
     -fno-omit-frame-pointer
     #-flto
     #-Wl,-flto
