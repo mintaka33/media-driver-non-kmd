@@ -1168,6 +1168,7 @@ VAStatus DdiMedia__Initialize (
     DDI_CHK_NULL(pDRMState,    "nullptr pDRMState", VA_STATUS_ERROR_INVALID_CONTEXT);
 
     // If libva failes to open the graphics card, try to open it again within Media Driver
+    // nonkmd: for non-kmd driver, will hack dri2_util.c in libva to make sure fd is always >= 0
     if(pDRMState->fd < 0 || pDRMState->fd == 0 )
     {
         DDI_ASSERTMESSAGE("DDI:LIBVA Wrapper doesn't pass file descriptor for graphics adaptor, trying to open the graphics... ");

@@ -182,7 +182,7 @@ va_isDRI2Connected(VADriverContextP ctx, char **driver_name)
     char *device_name = NULL;
     drm_magic_t magic;        
     *driver_name = NULL;
-    dri_state->base.fd = -1;
+    dri_state->base.fd = 1; // nonkmd: assign a valid value (>0) to pass driver check
     dri_state->base.auth_type = VA_NONE;
     if (!VA_DRI2QueryExtension(ctx->native_dpy, &event_base, &error_base))
         goto err_out;
@@ -230,7 +230,7 @@ err_out:
         close(dri_state->base.fd);
 
     *driver_name = NULL;
-    dri_state->base.fd = -1;
+    dri_state->base.fd = 1; // nonkmd: assign a valid value (>0) to pass driver check
     
     return False;
 }
