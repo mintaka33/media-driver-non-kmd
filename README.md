@@ -19,8 +19,8 @@ make
 sudo make install
 
 # build media-driver
-mkdir build
-cd build
+mkdir build_driver
+cd build_driver
 cmake ../media-driver \
 -DCMAKE_INSTALL_PREFIX=/usr \
 -DMEDIA_VERSION="2.0.0" \
@@ -29,11 +29,12 @@ cmake ../media-driver \
 -DBS_DIR_COMMON=`pwd`/../gmmlib/Source/Common/ \
 -DBS_DIR_INC=`pwd`/../gmmlib/Source/inc/ \
 -DBS_DIR_MEDIA=`pwd`/../media-driver
-make -j8
+make -j4
 sudo make install
 
 # build libva-utils
-cd libva-utils
-./autogen.sh CFLAGS=-g CXXFLAGS=-g
+mkdir build_utils
+cd build_utils
+../libva-utils/autogen.sh CFLAGS=-g CXXFLAGS=-g
 make
 ```
