@@ -36,5 +36,4 @@ sudo make install
 cd libva-utils
 ./autogen.sh CFLAGS=-g CXXFLAGS=-g
 make
-sudo make install
 ```
