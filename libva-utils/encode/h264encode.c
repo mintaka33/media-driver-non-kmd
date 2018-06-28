@@ -2378,7 +2378,7 @@ static int print_performance(unsigned int PictureCount)
 
     printf("\n\n");
 
-    printf("PERFORMANCE:   Frame Rate           : %.2f fps (%d frames, %d ms (%.2f ms per frame))\n",
+    fprintf(stderr, "PERFORMANCE:   Frame Rate           : %.2f fps (%d frames, %d ms (%.2f ms per frame))\n",
            (double) 1000*PictureCount / TotalTicks, PictureCount,
            TotalTicks, ((double)  TotalTicks) / (double) PictureCount);
     printf("PERFORMANCE:   Compression ratio    : %d:1\n", (unsigned int)(total_size / frame_size));
