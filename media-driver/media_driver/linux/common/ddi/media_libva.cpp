@@ -3509,6 +3509,9 @@ static VAStatus DdiMedia_SyncSurface (
                 }
                 else if (surface->curStatusReport.decode.status == CODECHAL_STATUS_INCOMPLETE || surface->curStatusReport.decode.status == CODECHAL_STATUS_UNAVAILABLE)
                 {
+                    // nonkmd: let driver always report success in Non-KMD mode since no real GPU workloads executed
+                    // TODO: a better but little complicated solution is, update status buffer (need parse command 
+                    // buffer to figure out where status buffer slot locate) in libdrm mock module.
                     return VA_STATUS_SUCCESS;
                 }
             }
