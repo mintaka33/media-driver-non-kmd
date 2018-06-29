@@ -134,7 +134,10 @@ DRMLibVA::DRMLibVA(int type)
     : CLibVA(type)
     , m_fd(-1)
 {
-    const mfxU32 IntelVendorID = 0x8086;
+    //nonkmd: change vendorID as default VirtualBox VM VGA compatible controller
+    // 00:02.0 VGA compatible controller: InnoTek Systemberatung GmbH VirtualBox Graphics Adapter
+    const mfxU32 IntelVendorID = 0x80ee; //0x8086;
+
     //the first Intel adapter is only required now, the second - in the future
     const mfxU32 numberOfRequiredIntelAdapter = 1;
     const char nodesNames[][8] = {"renderD", "card"};
