@@ -76,3 +76,26 @@ run ffmpeg
 ./ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i test.mp4 -vframes 1000 -c:v h264_vaapi out.mp4 -y
 ```
 
+# MSDK
+
+build MediaSDK
+```bash
+mkdir build_msdk
+cd build_msdk
+cmake ../msdk -DCMAKE_DEBUG_TYPE=Debug
+make -j8
+sudo make install
+```
+
+run MSDK sample application
+```bash
+# set environment
+export LD_PRELOAD=../build_driver/media_driver/linux/ult/libdrm_mock/libdrm_mock.so
+
+# decode
+./sample_decode h264 -i ~/test.264
+
+# transcode
+./sample_multi_transcode -i::h264 ~/test.264 -o::h264 out.264
+```
+
