@@ -70,6 +70,63 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "msdk-decode",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build_msdk/__bin/Debug/sample_decode",
+            "args": [
+                "h264",
+                "-i",
+                "~/test.264"
+            ],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "LD_PRELOAD",
+                    "value": "${workspaceFolder}/build_driver/media_driver/linux/ult/libdrm_mock/libdrm_mock.so"
+                }
+            ],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "msdk-transcode",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build_msdk/__bin/Debug/sample_multi_transcode",
+            "args": [
+                "-i::h264",
+                "~/test.264",
+                "-o::h264",
+                "out.264"
+            ],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "LD_PRELOAD",
+                    "value": "${workspaceFolder}/build_driver/media_driver/linux/ult/libdrm_mock/libdrm_mock.so"
+                }
+            ],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }
