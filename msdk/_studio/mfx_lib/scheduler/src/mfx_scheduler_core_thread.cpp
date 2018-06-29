@@ -1,0 +1,157 @@
+// Copyright (c) 2018 Intel Corporation
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+#include <mfx_scheduler_core.h>
+#include <mfx_scheduler_core_task.h>
+
+#include <mfx_trace.h>
+#include <stdio.h>
+#include <vm_time.h>
+
+
+mfxStatus mfxSchedulerCore::StartWakeUpThread(void)
+{
+    // stop the thread before creating it again
+    // don't try to check thread status, it might lead to interesting effects.
+    if (m_hwWakeUpThread.handle)
+        StopWakeUpThread();
+
+    m_timer_hw_event = MFX_THREAD_TIME_TO_WAIT;
+
+
+
+    return MFX_ERR_NONE;
+
+} // mfxStatus mfxSchedulerCore::StartWakeUpThread(void)
+
+mfxStatus mfxSchedulerCore::StopWakeUpThread(void)
+{
+
+    return MFX_ERR_NONE;
+
+} // mfxStatus mfxSchedulerCore::StopWakeUpThread(void)
+
+uint32_t mfxSchedulerCore::scheduler_thread_proc(void *pParam)
+{
+    MFX_SCHEDULER_THREAD_CONTEXT *pContext = (MFX_SCHEDULER_THREAD_CONTEXT *) pParam;
+
+    {
+        char thread_name[30] = {};
+        snprintf(thread_name, sizeof(thread_name)-1, "ThreadName=MSDK#%d", pContext->threadNum);
+        MFX_AUTO_LTRACE(MFX_TRACE_LEVEL_SCHED, thread_name);
+    }
+
+    pContext->pSchedulerCore->ThreadProc(pContext);
+    return (0x0cced00 + pContext->threadNum);
+}
+
+void mfxSchedulerCore::ThreadProc(MFX_SCHEDULER_THREAD_CONTEXT *pContext)
+{
+    UMC::AutomaticMutex guard(m_guard);
+
+    mfxTaskHandle previousTaskHandle = {};
+    const uint32_t threadNum = pContext->threadNum;
+
+    // main working cycle for threads
+    while (false == m_bQuit)
+    {
+        MFX_AUTO_LTRACE(MFX_TRACE_LEVEL_HOTSPOTS, "thread_proc");
+
+        MFX_CALL_INFO call = {};
+        mfxStatus mfxRes;
+
+        pContext->state = MFX_SCHEDULER_THREAD_CONTEXT::Waiting;
+
+        mfxRes = GetTask(call, previousTaskHandle, threadNum);
+        if (MFX_ERR_NONE == mfxRes)
+        {
+            pContext->state = MFX_SCHEDULER_THREAD_CONTEXT::Running;
+            vm_mutex_unlock(&m_guard);
+            {
+                // perform asynchronous operation
+                call_pRoutine(call);
+            }
+            vm_mutex_lock(&m_guard);
+
+            pContext->workTime += call.timeSpend;
+            // save the previous task's handle
+            previousTaskHandle = call.taskHandle;
+
+            // mark the task completed,
+            // set the sync point into the high state if any.
+            MarkTaskCompleted(&call, threadNum);
+            //timer1.Stop(0);
+        }
+        else
+        {
+            mfxU64 start, stop;
+
+
+            // mark beginning of sleep period
+            start = GetHighPerformanceCounter();
+
+            // there is no any task.
+            // sleep for a while until the event is signaled.
+            Wait(threadNum);
+
+            // mark end of sleep period
+            stop = GetHighPerformanceCounter();
+
+            // update thread statistic
+            pContext->sleepTime += (stop - start);
+
+        }
+    }
+}
+
+uint32_t mfxSchedulerCore::scheduler_wakeup_thread_proc(void *pParam)
+{
+    mfxSchedulerCore * const pSchedulerCore = (mfxSchedulerCore *) pParam;
+
+    {
+        const char thread_name[30] = "ThreadName=MSDKHWL#0";
+        MFX_AUTO_LTRACE(MFX_TRACE_LEVEL_SCHED, thread_name);
+    }
+
+    pSchedulerCore->WakeupThreadProc();
+    return 0x0ccedff;
+}
+
+void mfxSchedulerCore::WakeupThreadProc()
+{
+    // main working cycle for threads
+    while (false == m_bQuitWakeUpThread)
+    {
+        vm_status vmRes;
+
+        vmRes = vm_event_timed_wait(&m_hwTaskDone, m_timer_hw_event);
+
+        // HW event is signaled. Reset all HW waiting tasks.
+        if (VM_OK == vmRes||
+            VM_TIMEOUT == vmRes)
+        {
+            vmRes = vm_event_reset(&m_hwTaskDone);
+
+            //MFX_AUTO_LTRACE(MFX_TRACE_LEVEL_SCHED, "HW Event");
+            IncrementHWEventCounter();
+            WakeUpThreads(1,1);
+        }
+    }
+}
