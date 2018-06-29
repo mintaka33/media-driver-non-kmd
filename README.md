@@ -74,6 +74,10 @@ make -j8
 
 run ffmpeg
 ```bash
+# set environment
+export LD_PRELOAD=../build_driver/media_driver/linux/ult/libdrm_mock/libdrm_mock.so
+
+# run transcode
 ./ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i test.mp4 -vframes 1000 -c:v h264_vaapi out.mp4 -y
 ```
 
