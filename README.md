@@ -39,3 +39,40 @@ cd build_utils
 ../libva-utils/autogen.sh CFLAGS=-g CXXFLAGS=-g
 make
 ```
+
+# FFmpeg
+
+build ffmpeg
+```bash
+sudo apt update -qq && sudo apt-get -y install \
+  autoconf \
+  automake \
+  build-essential \
+  cmake \
+  git \
+  libass-dev \
+  libfreetype6-dev \
+  libsdl2-dev \
+  libtool \
+  libvorbis-dev \
+  libxcb1-dev \
+  libxcb-shm0-dev \
+  libxcb-xfixes0-dev \
+  pkg-config \
+  texinfo \
+  wget \
+  zlib1g-dev \
+  nasm
+  
+ sudo apt install libx264-dev libx265-dev
+ 
+ cd ~/FFmpeg
+./configure --enable-debug=3 --disable-optimizations --enable-libx264 --enable-libx265 --enable-gpl
+make -j8
+```
+
+run ffmpeg
+```bash
+./ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i test.mp4 -vframes 1000 -c:v h264_vaapi out.mp4 -y
+```
+
