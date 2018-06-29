@@ -1,5 +1,7 @@
 build_driver
 build_utils
+build_msdk
+
 autom4te.cache
 
 *.m4
