@@ -186,7 +186,8 @@ va_isDRI2Connected(VADriverContextP ctx, char **driver_name)
     // nonkmd: the fd number can be used to select Gen platforms
     // (fd-1) will be used as indext to select mocked Gen platform defined in 
     // DeviceConfigTable 0-SKL, 1-BXT, 2-BDW, 3-CNL
-    dri_state->base.fd = 1; // nonkmd: assign a valid value (>0) to pass driver check
+    int platform = 0;
+    dri_state->base.fd = platform + 1; // nonkmd: assign a valid value (>0) to pass driver check
 
     dri_state->base.auth_type = VA_NONE;
     if (!VA_DRI2QueryExtension(ctx->native_dpy, &event_base, &error_base))
@@ -235,7 +236,7 @@ err_out:
         close(dri_state->base.fd);
 
     *driver_name = NULL;
-    dri_state->base.fd = 1; // nonkmd: assign a valid value (>0) to pass driver check
+    dri_state->base.fd = platform + 1; // nonkmd: assign a valid value (>0) to pass driver check
     
     return False;
 }
