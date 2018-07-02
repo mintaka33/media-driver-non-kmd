@@ -16,3 +16,4 @@ libva-utils/depcomp
 libva-utils/install-sh
 libva-utils/ltmain.sh
 libva-utils/missing
+out.264
