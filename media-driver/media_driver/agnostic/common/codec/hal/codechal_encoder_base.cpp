@@ -527,12 +527,16 @@ MOS_STATUS CodechalEncoderState::Allocate(CodechalSetting * codecHalSettings)
 
     if (CodecHalUsesRenderEngine(codecHalSettings->codecFunction, codecHalSettings->standard))
     {
-        m_renderContextUsesNullHw = m_useNullHw[m_renderContext];
+        // nonkmd: MSDK transcode app will query coded buffer status to get HW status and bitstream buffer size,
+        // just leverage NullHW code path to set default value in status query to pass MSDK check
+        m_renderContextUsesNullHw = true; //m_useNullHw[m_renderContext];
     }
 
     if (CodecHalUsesVideoEngine(codecHalSettings->codecFunction))
     {
-        m_videoContextUsesNullHw = m_useNullHw[m_videoContext];
+        // nonkmd: MSDK transcode app will query coded buffer status to get HW status and bitstream buffer size,
+        // just leverage NullHW code path to set default value in status query to pass MSDK check
+        m_videoContextUsesNullHw = true; //m_useNullHw[m_videoContext];
         CODECHAL_ENCODE_CHK_STATUS_RETURN(m_osInterface->pfnRegisterBBCompleteNotifyEvent(
             m_osInterface,
             m_videoContext));
