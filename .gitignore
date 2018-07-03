@@ -1,6 +1,9 @@
+FFmpeg
+
 build_driver
 build_utils
 build_msdk
+build_ffmpeg
 
 autom4te.cache
 
