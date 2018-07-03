@@ -270,7 +270,7 @@ int main(int argc,char **argv)
         CHECK_VASTATUS(va_status, "vaPutSurface");
     }
     printf("press any key to exit\n");
-    getchar();
+    //getchar();
 
     vaDestroySurfaces(va_dpy,&surface_id,1);
     vaDestroyConfig(va_dpy,config_id);
