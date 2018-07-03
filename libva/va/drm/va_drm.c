@@ -95,6 +95,12 @@ vaGetDisplayDRM(int fd)
     if (fd < 0 || (is_render_nodes = VA_DRM_IsRenderNodeFd(fd)) < 0)
         return NULL;
 
+    // nonkmd: MSDK app will call into this function to init drm state, add a hack here to change fd
+    // value to specify Gen platforms. (fd-1) will be used as indext to select mocked Gen platform 
+    // defined in DeviceConfigTable: 0-SKL, 1-BXT, 2-BDW, 3-CNL
+    int gen_platform = 3; //CNL
+    fd = gen_platform + 1;
+
     /* Create new entry */
     /* XXX: handle cache? */
     drm_state = calloc(1, sizeof(*drm_state));
