@@ -67,8 +67,9 @@ sudo apt update -qq && sudo apt-get -y install \
   
  sudo apt install libx264-dev libx265-dev
  
- cd ~/FFmpeg
-./configure --enable-debug=3 --disable-optimizations --enable-libx264 --enable-libx265 --enable-gpl
+ mkdir build_ffmpeg
+ cd build_ffmpeg
+../FFmpeg/configure --enable-debug=3 --disable-optimizations --enable-libx264 --enable-libx265 --enable-gpl
 make -j8
 ```
 
