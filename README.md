@@ -69,7 +69,9 @@ sudo apt update -qq && sudo apt-get -y install \
  
  mkdir build_ffmpeg
  cd build_ffmpeg
-../FFmpeg/configure --enable-debug=3 --disable-optimizations --enable-libx264 --enable-libx265 --enable-gpl
+../FFmpeg/configure --enable-debug=3 --disable-optimizations --enable-libx264 \
+--enable-libx265 --enable-gpl
+
 make -j8
 ```
 
@@ -79,7 +81,12 @@ run ffmpeg
 export LD_PRELOAD=../build_driver/media_driver/linux/ult/libdrm_mock/libdrm_mock.so
 
 # run transcode
-./ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i test.mp4 -vframes 1000 -c:v h264_vaapi out.mp4 -y
+./ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i test.mp4 \
+-vframes 1000 -c:v h264_vaapi out.mp4 -y
+
+# transcode with vpp scaling
+./ffmpeg -hwaccel vaapi -hwaccel_output_format vaapi -i test.mp4 \
+-vf 'scale_vaapi=640:480:nv12' -vframes 1000 -c:v h264_vaapi out.mp4 -y
 ```
 
 # MSDK
