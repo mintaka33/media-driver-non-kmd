@@ -837,7 +837,7 @@ int tinyjpeg_decode(struct jdec_private *priv)
    // va_close_display(va_dpy);
     vaTerminate(va_dpy);
     printf("press any key to exit23\n");
-    getchar();
+    //getchar();
     return 0;
 }
 const char *tinyjpeg_get_errorstring(struct jdec_private *priv)
