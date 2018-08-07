@@ -5,6 +5,30 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "utils-vainfo",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build_utils/vainfo/vainfo",
+            "args": [],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "LD_PRELOAD",
+                    "value": "${workspaceFolder}/build_driver/media_driver/linux/ult/libdrm_mock/libdrm_mock.so"
+                }
+            ],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
             "name": "utils-decode",
             "type": "cppdbg",
             "request": "launch",
@@ -12,7 +36,12 @@
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
-            "environment": [],
+            "environment": [
+                {
+                    "name": "LD_PRELOAD",
+                    "value": "${workspaceFolder}/build_driver/media_driver/linux/ult/libdrm_mock/libdrm_mock.so"
+                }
+            ],
             "externalConsole": true,
             "MIMode": "gdb",
             "setupCommands": [
@@ -29,6 +58,30 @@
             "request": "launch",
             "program": "${workspaceFolder}/build_utils/decode/mpeg2vldemo",
             "args": [],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [
+                {
+                    "name": "LD_PRELOAD",
+                    "value": "${workspaceFolder}/build_driver/media_driver/linux/ult/libdrm_mock/libdrm_mock.so"
+                }
+            ],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "utils-loadjpeg",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build_utils/decode/loadjpeg",
+            "args": ["${workspaceFolder}/build_utils/decode/out.jpg"],
             "stopAtEntry": true,
             "cwd": "${workspaceFolder}",
             "environment": [
