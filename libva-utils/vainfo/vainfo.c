@@ -111,9 +111,14 @@ int main(int argc, const char* argv[])
       return 2;
   }
   
+  int saved_stdout = dup(1);
+  
   va_status = vaInitialize(va_dpy, &major_version, &minor_version);
   CHECK_VASTATUS(va_status, "vaInitialize", 3);
-  
+
+  fflush(stdout);
+  dup2(saved_stdout, 1);
+
   printf("%s: VA-API version: %d.%d (libva %s)\n",
          name, major_version, minor_version, LIBVA_VERSION_S);
 
