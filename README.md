@@ -70,8 +70,8 @@ sudo apt install \
  
  mkdir build_ffmpeg
  cd build_ffmpeg
-../FFmpeg/configure --enable-debug=3 --disable-optimizations --enable-libx264 \
---enable-libx265 --enable-gpl
+../FFmpeg/configure --enable-libx264 --enable-libx265 --enable-gpl \
+--enable-debug=3 --disable-optimizations 
 
 make -j8
 ```
