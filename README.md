@@ -45,7 +45,8 @@ make
 
 build ffmpeg
 ```bash
-sudo apt update -qq && sudo apt-get -y install \
+sudo apt update
+sudo apt install \
   autoconf \
   automake \
   build-essential \
